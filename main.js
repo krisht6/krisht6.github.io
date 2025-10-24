@@ -4,53 +4,17 @@ let uploadedResumeURL = null;
 
 // ---------- Data ----------
 const techProjects = [
-  { title: 'NFT Garage', tags:['Next.js','Mapbox'], desc:'dApp enabling users to mint, customize, and display digital cars NFTs on the Sepolia testnet' },
-  { title: 'HPF Datascrapes', tags:['Python','Pandas'], desc:'Data Processing for University at Buffalo Department of Behavioral Medicine' },
-  { title: 'Catan AI/ML agent', tags:['Python','Q-Learning'], desc:'Self-play machine learning agent for Cities & Knights' },
-  { title: 'NBA Analytics Database', tags:['SQL','PgAdmin'], desc:'Performace and history statistical relations to provide insights on teams/players' },
+  { title: 'NFT Garage', tags:['Next.js','Mapbox'], desc:'dApp enabling users to mint, customize, and display digital cars NFTs on the Sepolia testnet', link:'https://github.com/krisht6/NFT-Garage'},
+  { title: 'HPF Datascrapes', tags:['Python','Pandas'], desc:'Data Processing for University at Buffalo Department of Behavioral Medicine', link:'https://github.com/krisht6/HPFdatascrapes' },
+  { title: 'Catan AI/ML agent', tags:['Python','Q-Learning'], desc:'Self-play machine learning agent for Cities & Knights', link:'https://github.com/krisht6/AI-Catan-Agent' },
+  { title: 'FIFA Position Predicter', tags:['Machine Learning','K-Clustering'], desc:'Performance and history statistical relations to provide insights on teams/players', link:'https://github.com/krisht6/Soccer-Player-Position-Model' },
+  { title: 'Ontology Finder', tags:['EBI OLS4 API','Bioinformatics'], desc:'Browser-based interface for exploring biomedical ontologies (CL, GO, NCIT)', link:'https://github.com/krisht6/ontology-finder-ui' },
+  { title: 'SAFE Optimization', tags:['Python','Forecasting'], desc:'Data-driven research and provided insights - Increased engagement on SA Meta Platforms by over 40%', link:'https://github.com/krisht6/Safe-Data-Scrape' },
 ];
 
-const creative = {
-  tracks: [
-    { title: '88', src: 'src/88 Samba.mp3' },
-    { title: 'We Up We Out', src: 'src/untitled.mp3' },
-    { title: 'Inner Gates', src: 'src/wisdom teeth cookup.mp3' },
-  ],
-  photoshop: [
-    { src: 'src/reflections6.jpg' },
-    { src: 'src/tracksgradient.jpg'}
-  ],
-  renders: [
-    { src: 'src/krishblenderlogo.MP4' }
-  ]
-};
 
 // ---------- Rendering ----------
 function renderProjects(){
-  // Helper: show modal overlay with enlarged media
-  function showModal(src, type, title) {
-    let modal = document.getElementById('mediaModal');
-    if (!modal) {
-      modal = document.createElement('div');
-      modal.id = 'mediaModal';
-      modal.style = `position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:9999;`;
-      modal.innerHTML = `<div id='modalContent' style='max-width:90vw;max-height:90vh;position:relative;'><button id='closeModal' style='position:absolute;top:12px;right:12px;font-size:2rem;background:none;border:none;color:#fff;cursor:pointer;z-index:2'>&times;</button></div>`;
-      document.body.appendChild(modal);
-      modal.addEventListener('click', e => { if(e.target===modal) modal.remove(); });
-      modal.querySelector('#closeModal').onclick = () => modal.remove();
-    } else {
-      modal.style.display = 'flex';
-    }
-    const content = modal.querySelector('#modalContent');
-    content.innerHTML = `<button id='closeModal' style='position:absolute;top:12px;right:12px;font-size:2rem;background:none;border:none;color:#fff;cursor:pointer;z-index:2'>&times;</button>`;
-    if(type==='img') {
-      content.innerHTML += `<img src='${src}' alt='${title}' title='${title}' style='max-width:100%;max-height:80vh;border-radius:16px;box-shadow:0 2px 24px #0008;' />`;
-    } else if(type==='video') {
-      content.innerHTML += `<video src='${src}' controls autoplay style='max-width:100%;max-height:80vh;border-radius:16px;box-shadow:0 2px 24px #0008;'></video>`;
-    }
-    if(title) content.innerHTML += `<div style='color:#fff;text-align:center;margin-top:8px;font-size:1.1rem;'>${title}</div>`;
-    content.querySelector('#closeModal').onclick = () => modal.remove();
-  }
     // Animated Sky Background
     window.addEventListener('DOMContentLoaded', function() {
       const canvas = document.getElementById('skybg');
@@ -136,9 +100,16 @@ function renderProjects(){
     techProjects.forEach(p=>{
       const card = document.createElement('div');
       card.className = 'project';
+      // If a project has a `link` property, render it as a clickable anchor that opens in a new tab.
+      // Otherwise render a disabled placeholder button so you can add the link later.
+      const linkHtml = p.link ?
+        `<a class="btn small project-link" href="${p.link}" target="_blank" rel="noopener noreferrer" style="margin-top:10px;display:inline-block">View</a>` :
+        `<button class="btn small project-link" disabled style="margin-top:10px;display:inline-block;opacity:0.5;cursor:default">Add link</button>`;
+
       card.innerHTML = `<h4>${p.title}</h4>
         <div class="meta">${p.tags.join(' • ')}</div>
-        <p class="muted">${p.desc}</p>`;
+        <p class="muted">${p.desc}</p>
+        ${linkHtml}`;
       grid.appendChild(card);
     })
     mount.appendChild(grid);
@@ -163,61 +134,7 @@ function renderProjects(){
           <div class="gallery" id="renderGallery" style="margin-top:10px"></div>
         </div>
       </div>`;
-    mount.appendChild(wrap);
-
-    // Fill tracks
-    const tl = wrap.querySelector('#tracklist');
-    creative.tracks.forEach((t, i)=>{
-      const row = document.createElement('div');
-      row.className = 'track';
-      row.innerHTML = `<span>${i+1}. ${t.title}</span><span>▶︎</span>`;
-      row.addEventListener('click', ()=>{
-        const player = document.getElementById('player');
-        if(t.src){ player.src = t.src; player.play(); }
-        else alert('No audio URL set yet for \"'+t.title+'\". Edit creative.tracks in main.js.');
-      })
-      tl.appendChild(row);
-    })
-
-    // Fill galleries with actual images and videos
-    const psG = wrap.querySelector('#psGallery');
-    creative.photoshop.forEach(photo => {
-      const div = document.createElement('div');
-      div.className = 'thumb';
-      div.style = 'display:flex;align-items:center;justify-content:center;height:100px;background:rgba(255,255,255,0.03);border-radius:12px;overflow:hidden;margin-bottom:8px;cursor:pointer;';
-      const img = document.createElement('img');
-      img.src = photo.src;
-      img.alt = photo.title;
-      img.title = photo.title;
-      img.style = 'width:100%;height:auto;border-radius:8px;object-fit:cover;';
-      div.appendChild(img);
-      div.onclick = () => showModal(photo.src, 'img', photo.title);
-      psG.appendChild(div);
-    });
-    const rG = wrap.querySelector('#renderGallery');
-    creative.renders.forEach(render => {
-      const div = document.createElement('div');
-      div.className = 'thumb render';
-      div.style = 'display:flex;align-items:center;justify-content:center;height:140px;background:rgba(255,255,255,0.03);border-radius:12px;overflow:hidden;margin-bottom:8px;cursor:pointer;';
-      if(render.src.match(/\.(mp4|webm|ogg)$/i)) {
-        const video = document.createElement('video');
-        video.src = render.src;
-        video.controls = true;
-        video.title = render.title;
-        video.style = 'width:100%;height:auto;border-radius:8px;object-fit:cover;';
-        div.appendChild(video);
-        div.onclick = () => showModal(render.src, 'video', render.title);
-      } else {
-        const img = document.createElement('img');
-        img.src = render.src;
-        img.alt = render.title;
-        img.title = render.title;
-        img.style = 'width:100%;height:auto;border-radius:8px;object-fit:cover;';
-        div.appendChild(img);
-        div.onclick = () => showModal(render.src, 'img', render.title);
-      }
-      rG.appendChild(div);
-    });
+    mount.appendChild(wrap);  
   }
 }
 
