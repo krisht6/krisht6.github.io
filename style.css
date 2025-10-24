@@ -74,6 +74,59 @@ p{margin:0 0 12px;color:var(--muted)}
   }
 }
 
+/* Mobile-specific fixes for the About / profile box to avoid overlaps and stacking issues */
+@media (max-width: 480px) {
+  /* The about section uses inline flex styles; override them for small screens */
+  #about > div {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 12px !important;
+    width: 100% !important;
+  }
+
+  /* Avatar container: center the image and remove left padding */
+  #about > div > div:first-child {
+    padding-left: 0 !important;
+    max-width: 220px !important;
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+  }
+
+  /* Make the avatar image a reasonable fixed size on mobile */
+  #about img {
+    width: 140px !important;
+    max-width: 140px !important;
+    height: auto !important;
+    object-fit: contain !important;
+    border-radius: 12px !important;
+    display: block !important;
+  }
+
+  /* Text/content column: remove negative margin, center text and allow full width */
+  #about > div > div:nth-child(2) {
+    margin-left: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    align-items: center !important;
+    text-align: center !important;
+    padding: 0 12px !important;
+  }
+
+  /* Make the Professional Contacts row sit on its own line and center icons */
+  #about .linkgrid {
+    justify-content: center !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+    margin-top: 8px !important;
+  }
+
+  /* Slightly reduce heading size to fit mobile */
+  #about h1 { font-size: 26px !important; }
+  #about h2 { font-size: 18px !important; margin-top:8px !important; }
+}
+
 /* Pills & buttons */
 .pillbar{display:flex; gap:8px; padding:6px; border-radius:999px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.08)}
 .pill{flex:1; text-align:center; padding:10px 14px; border-radius:999px; cursor:pointer; user-select:none; color:var(--muted); transition:.25s ease}
