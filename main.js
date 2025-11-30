@@ -10,6 +10,10 @@ const techProjects = [
   { title: 'FIFA Position Predicter', tags:['Machine Learning','K-Clustering'], desc:'Performance and history statistical relations to provide insights on teams/players', link:'https://github.com/krisht6/Soccer-Player-Position-Model' },
   { title: 'Ontology Finder', tags:['EBI OLS4 API','Bioinformatics'], desc:'Browser-based interface for exploring biomedical ontologies (CL, GO, NCIT)', link:'https://github.com/krisht6/ontology-finder-ui' },
   { title: 'SAFE Optimization', tags:['Python','Forecasting'], desc:'Data-driven research and provided insights - Increased engagement on SA Meta Platforms by over 40%', link:'https://github.com/krisht6/Safe-Data-Scrape' },
+  { title: 'Retro Yahtzee', tags:['HTML','Heuristics'], desc:'Heuristic algorithm powering the CPU opponent in a web-based Yahtzee game.', link:'https://krishthakkar.com/yahtzeeGame/' },
+  { title: 'Game of Thrones Map', tags:['Webkit','Scripting'], desc:'Interactive map of Game of Thrones, allowing users to zoom, pan, and click on locations to reveal detailed lore', link:'http://krishthakkar.com/got-map/' }
+
+
 ];
 
 
