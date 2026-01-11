@@ -24,7 +24,8 @@ body{
   padding-top: env(safe-area-inset-top);
   padding-bottom: constant(safe-area-inset-bottom);
   padding-bottom: env(safe-area-inset-bottom);
-  background: transparent; /* canvas sits on top, page background prevents white bars */
+  /* set a dark page background as a fallback behind the canvas */
+  background: var(--bg);
   color:var(--text);
   font: 500 16px/1.6 Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
   -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
@@ -32,17 +33,25 @@ body{
 
 #skybg {
   position: fixed;
-  inset: 0; /* covers from safe-area top to bottom */
-  width: 100vw;
-  /* Use dynamic viewport height to avoid iOS white bars when browser UI is visible */
-  height: 100dvh;
-  min-height: 100dvh;
+  /* expand into the device safe-area so the canvas reaches under the notch/home indicator */
+  top: calc(0px - constant(safe-area-inset-top));
+  top: calc(0px - env(safe-area-inset-top));
+  left: calc(0px - constant(safe-area-inset-left));
+  left: calc(0px - env(safe-area-inset-left));
+  right: calc(0px - constant(safe-area-inset-right));
+  right: calc(0px - env(safe-area-inset-right));
+  bottom: calc(0px - constant(safe-area-inset-bottom));
+  bottom: calc(0px - env(safe-area-inset-bottom));
+  width: calc(100vw + env(safe-area-inset-left) + env(safe-area-inset-right));
+  height: calc(100dvh + env(safe-area-inset-top) + env(safe-area-inset-bottom));
+  min-height: calc(100dvh + env(safe-area-inset-top) + env(safe-area-inset-bottom));
   /* fallback for older WebKit */
   height: -webkit-fill-available;
   z-index: -1;
   pointer-events: none;
   display: block;
-  background: transparent;
+  /* dark fallback in case the canvas isn't immediately drawn */
+  background: var(--bg);
 }
 .container{max-width:1160px;margin:30px auto;padding:20px}
 
