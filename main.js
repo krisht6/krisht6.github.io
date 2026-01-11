@@ -22,36 +22,92 @@ function renderProjects(){
       const canvas = document.getElementById('skybg');
       if (!canvas) return;
       const ctx = canvas.getContext('2d');
-      function resizeCanvas() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+
+      // Helper: read safe-area insets via CSS env() by measuring a hidden element
+      function getSafeAreaInsets() {
+        const tmp = document.createElement('div');
+        tmp.style.position = 'fixed';
+        tmp.style.visibility = 'hidden';
+        tmp.style.paddingTop = 'env(safe-area-inset-top)';
+        tmp.style.paddingBottom = 'env(safe-area-inset-bottom)';
+        tmp.style.paddingLeft = 'env(safe-area-inset-left)';
+        tmp.style.paddingRight = 'env(safe-area-inset-right)';
+        document.body.appendChild(tmp);
+        const cs = getComputedStyle(tmp);
+        const t = parseFloat(cs.paddingTop) || 0;
+        const b = parseFloat(cs.paddingBottom) || 0;
+        const l = parseFloat(cs.paddingLeft) || 0;
+        const r = parseFloat(cs.paddingRight) || 0;
+        tmp.remove();
+        return {t,b,l,r};
       }
-      resizeCanvas();
+
+      function resizeCanvas() {
+        const dpr = window.devicePixelRatio || 1;
+        let vw = window.innerWidth, vh = window.innerHeight;
+        if (window.visualViewport) { vw = window.visualViewport.width; vh = window.visualViewport.height; }
+        const insets = getSafeAreaInsets();
+        const widthCss = vw + insets.l + insets.r;
+        const heightCss = vh + insets.t + insets.b;
+
+        const widthPx = Math.ceil(widthCss * dpr);
+        const heightPx = Math.ceil(heightCss * dpr);
+
+        // Only update when needed to avoid resetting during scrolls
+        if (canvas.width !== widthPx || canvas.height !== heightPx) {
+          canvas.width = widthPx;
+          canvas.height = heightPx;
+          canvas.style.width = widthCss + 'px';
+          canvas.style.height = heightCss + 'px';
+          // scale the drawing context so 1 unit === 1 CSS pixel
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+          // If clouds exist, reposition them within new bounds to avoid visual tearing
+          if (Array.isArray(window._clouds_ref)) {
+            const cloudsRef = window._clouds_ref;
+            for (let c of cloudsRef) {
+              c.x = Math.random() * widthCss;
+              c.y = Math.random() * heightCss;
+            }
+          }
+        }
+      }
+
+      // Wire resize listeners (visualViewport covers iOS dynamic chrome changes)
       window.addEventListener('resize', resizeCanvas);
+      window.addEventListener('orientationchange', resizeCanvas);
+      if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', resizeCanvas);
+        window.visualViewport.addEventListener('scroll', resizeCanvas);
+      }
 
       // Cloud properties
       const cloudCount = 18;
       const clouds = [];
       for (let i = 0; i < cloudCount; i++) {
         clouds.push({
-          x: Math.random() * window.innerWidth,
-          y: Math.random() * window.innerHeight,
+          x: Math.random() * (canvas.clientWidth || window.innerWidth),
+          y: Math.random() * (canvas.clientHeight || window.innerHeight),
           r: 60 + Math.random() * 120,
           speed: 0.15 + Math.random() * 0.35,
           opacity: 0.13 + Math.random() * 0.22,
           layers: Math.floor(2 + Math.random() * 3)
         });
       }
+      // expose a reference so resize can update positions
+      window._clouds_ref = clouds;
 
       function drawSky() {
-        // Blue gradient sky
-        const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+        // Use CSS pixel dimensions for gradients and fills
+        const cw = canvas.clientWidth || (canvas.width / (window.devicePixelRatio || 1));
+        const ch = canvas.clientHeight || (canvas.height / (window.devicePixelRatio || 1));
+        const grad = ctx.createLinearGradient(0, 0, 0, ch);
         grad.addColorStop(0, '#0a2340');
         grad.addColorStop(0.4, '#1a4a7a');
         grad.addColorStop(0.7, '#2b6cb0');
         grad.addColorStop(1, '#10141e');
         ctx.fillStyle = grad;
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillRect(0, 0, cw, ch);
       }
 
       function drawCloud(cloud, t) {
@@ -78,11 +134,13 @@ function renderProjects(){
       function animate() {
         const t = performance.now();
         drawSky();
+        const cw = canvas.clientWidth || (canvas.width / (window.devicePixelRatio || 1));
+        const ch = canvas.clientHeight || (canvas.height / (window.devicePixelRatio || 1));
         for (let cloud of clouds) {
           cloud.x += cloud.speed;
-          if (cloud.x - cloud.r > canvas.width) {
+          if (cloud.x - cloud.r > cw) {
             cloud.x = -cloud.r;
-            cloud.y = Math.random() * canvas.height;
+            cloud.y = Math.random() * ch;
             cloud.r = 60 + Math.random() * 120;
             cloud.opacity = 0.13 + Math.random() * 0.22;
             cloud.layers = Math.floor(2 + Math.random() * 3);
@@ -91,6 +149,9 @@ function renderProjects(){
         }
         requestAnimationFrame(animate);
       }
+
+      // initial sizing & start
+      resizeCanvas();
       animate();
     });
   const mount = document.getElementById('projectsContent');
