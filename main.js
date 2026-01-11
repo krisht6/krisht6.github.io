@@ -4,12 +4,14 @@ let uploadedResumeURL = null;
 
 // ---------- Data ----------
 const techProjects = [
-  { title: 'NFT Garage', tags:['Next.js','Mapbox'], desc:'dApp enabling users to mint, customize, and display digital cars NFTs on the Sepolia testnet', link:'https://github.com/krisht6/NFT-Garage'},
-  { title: 'HPF Datascrapes', tags:['Python','Pandas'], desc:'Data Processing for University at Buffalo Department of Behavioral Medicine', link:'https://github.com/krisht6/HPFdatascrapes' },
-  { title: 'Catan AI/ML agent', tags:['Python','Q-Learning'], desc:'Self-play machine learning agent for Cities & Knights', link:'https://github.com/krisht6/AI-Catan-Agent' },
-  { title: 'FIFA Position Predicter', tags:['Machine Learning','K-Clustering'], desc:'Performance and history statistical relations to provide insights on teams/players', link:'https://github.com/krisht6/Soccer-Player-Position-Model' },
-  { title: 'Ontology Finder', tags:['EBI OLS4 API','Bioinformatics'], desc:'Browser-based interface for exploring biomedical ontologies (CL, GO, NCIT)', link:'https://github.com/krisht6/ontology-finder-ui' },
-  { title: 'SAFE Optimization', tags:['Python','Forecasting'], desc:'Data-driven research and provided insights - Increased engagement on SA Meta Platforms by over 40%', link:'https://github.com/krisht6/Safe-Data-Scrape' },
+  { title: 'NFT Garage', tags:['Next.js','Mapbox'], desc:'dApp enabling users to mint, customize, and display digital cars NFTs on the Sepolia testnet', link:'https://github.com/krisht6/NFT-Garage', lane:'web' },
+  { title: 'HPF Datascrapes', tags:['Python','Pandas'], desc:'Data Processing for University at Buffalo Department of Behavioral Medicine', link:'https://github.com/krisht6/HPFdatascrapes', lane:'enterprise' },
+  { title: 'Catan AI/ML agent', tags:['Python','Q-Learning'], desc:'Self-play machine learning agent for Cities & Knights', link:'https://github.com/krisht6/AI-Catan-Agent', lane:'ml' },
+  { title: 'FIFA Position Predictor', tags:['Machine Learning','K-Clustering'], desc:'Performance and history statistical relations to provide insights on teams/players', link:'https://github.com/krisht6/Soccer-Player-Position-Model', lane:'ml' },
+  { title: 'Ontology Finder', tags:['EBI OLS4 API','Bioinformatics'], desc:'Browser-based interface for exploring biomedical ontologies (CL, GO, NCIT)', link:'https://github.com/krisht6/ontology-finder-ui', lane:'web' },
+  { title: 'SAFE Optimization', tags:['Python','Forecasting'], desc:'Data-driven research and provided insights - Increased engagement on SA Meta Platforms by over 40%', link:'https://github.com/krisht6/Safe-Data-Scrape', lane:'enterprise' },
+  { title: 'Retro Yahtzee', tags:['HTML','Heuristics'], desc:'Heuristic algorithm powering the CPU opponent in a web-based Yahtzee game.', link:'https://krishthakkar.com/yahtzeeGame/', lane:'web' },
+  { title: 'Game of Thrones Map', tags:['Webkit','Scripting'], desc:'Interactive map of Game of Thrones, allowing users to zoom, pan, and click on locations to reveal detailed lore', link:'http://krishthakkar.com/got-map/', lane:'web' }
 ];
 
 
