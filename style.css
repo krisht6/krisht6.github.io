@@ -4,6 +4,7 @@
   --text: #0b0b0b;
   --muted: #555;
   --hairline: rgba(0,0,0,0.14);
+  --tile-white: #FCFCFC;
 
 
   /* type (custom fonts later = swap these variables) */
@@ -448,7 +449,7 @@ body{
   gap: 12px;
   text-decoration: none;
   color: var(--text);
-  background: #fff;
+  background: var(--tile-white);
 }
 
 .tile:hover{
@@ -539,13 +540,9 @@ body{
   width: 180px;
   height: 180px;
   border-radius: 22px;
-  background: #fff;
+  background: var(--tile-white);
   display: grid;
   place-items: center;
-
-  box-shadow:
-    0 20px 50px rgba(0,0,0,0.06),
-    inset 0 0 0 1px rgba(0,0,0,0.04);
 }
 
 .tile__media img {
