@@ -7,15 +7,75 @@ setVhVar();
 window.addEventListener("resize", setVhVar);
 window.addEventListener("orientationchange", setVhVar);
 
+// NOTE:
+// Your images live in: /src/projectimages/*.png
+// Because main.js is loaded from the root, the correct relative path is:
+// "src/projectimages/<file>.png"
 const projects = [
-  { title: "NFT Garage", tags:["Next.js","Mapbox"], desc:"dApp enabling users to mint, customize, and display digital cars NFTs on the Sepolia testnet", link:"https://github.com/krisht6/NFT-Garage", lane:"web" },
-  { title: "Ontology Finder", tags:["EBI OLS4 API","Bioinformatics"], desc:"Browser-based interface for exploring biomedical ontologies (CL, GO, NCIT)", link:"https://github.com/krisht6/ontology-finder-ui", lane:"web" },
-  { title: "HPF Datascrapes", tags:["Python","Pandas"], desc:"Data Processing for University at Buffalo Department of Behavioral Medicine", link:"https://github.com/krisht6/HPFdatascrapes", lane:"enterprise" },
-  { title: "Catan AI/ML agent", tags:["Python","Q-Learning"], desc:"Self-play machine learning agent for Cities & Knights", link:"https://github.com/krisht6/AI-Catan-Agent", lane:"ml" },
-  { title: "FIFA Position Predictor", tags:["Machine Learning","K-Clustering"], desc:"Performance and history statistical relations to provide insights on teams/players", link:"https://github.com/krisht6/Soccer-Player-Position-Model", lane:"ml" },
-  { title: "SAFE Optimization", tags:["Python","Forecasting"], desc:"Data-driven research and provided insights - Increased engagement on SA Meta Platforms by over 40%", link:"https://github.com/krisht6/Safe-Data-Scrape", lane:"enterprise" },
-  { title: "Heuristic Yahtzee", tags:["HTML","Heuristics"], desc:"Algorithm-powered CPU opponent in a web-based retro Yahtzee game.", link:"https://krishthakkar.com/yahtzeeGame/", lane:"web" },
-  { title: "GoT Map", tags:["Webkit","Scripting"], desc:"Interactive map of GoT, allowing users to zoom, pan, and click on locations to reveal detailed lore", link:"http://krishthakkar.com/got-map/", lane:"web" }
+  {
+    title: "NFT Garage",
+    tags: ["Remix", "Solidity", "Sepolia"],
+    desc: "dApp enabling users to mint, customize, and display automotive NFTs on the Sepolia testnet",
+    link: "https://github.com/krisht6/NFT-Garage",
+    lane: "web",
+    image: "src/projectimages/nftgarage.png",
+  },
+  {
+    title: "Ontology Finder",
+    tags: ["EBI OLS4 API", "Bioinformatics"],
+    desc: "Browser-based interface for exploring biomedical ontologies (CL, GO, NCIT)",
+    link: "https://github.com/krisht6/ontology-finder-ui",
+    lane: "web",
+    image: "src/projectimages/ontologyfinder.png",
+  },
+  {
+    title: "HPF Datascrapes",
+    tags: ["Python", "Pandas"],
+    desc: "Data Processing for University at Buffalo Department of Behavioral Medicine",
+    link: "https://github.com/krisht6/HPFdatascrapes",
+    lane: "enterprise",
+    image: "src/projectimages/hpfdatascrapes.png",
+  },
+  {
+    title: "Catan AI/ML agent",
+    tags: ["Python", "Q-Learning", "Reinforcement"],
+    desc: "Self-play machine learning agent for Cities & Knights",
+    link: "https://github.com/krisht6/AI-Catan-Agent",
+    lane: "ml",
+    image: "src/projectimages/catan.png",
+  },
+  {
+    title: "FIFA Position Predictor",
+    tags: ["K-Clustering", "Data Analysis"],
+    desc: "Performance and history statistical relations to provide insights on teams/players",
+    link: "https://github.com/krisht6/Soccer-Player-Position-Model",
+    lane: "ml",
+    image: "src/projectimages/fifa.png",
+  },
+  {
+    title: "SAFE Optimization",
+    tags: ["Python", "Forecasting"],
+    desc: "Data-driven research and provided insights - Increased engagement on SA Meta Platforms by over 40%",
+    link: "https://github.com/krisht6/Safe-Data-Scrape",
+    lane: "enterprise",
+    image: "src/projectimages/safe.png",
+  },
+  {
+    title: "Heuristic Yahtzee",
+    tags: ["HTML", "Heuristics"],
+    desc: "Algorithm-powered CPU opponent in a web-based retro Yahtzee game.",
+    link: "https://krishthakkar.com/yahtzeeGame/",
+    lane: "web",
+    image: "src/projectimages/yahtzee.png",
+  },
+  {
+    title: "GoT Map",
+    tags: ["Webkit", "Scripting"],
+    desc: "Interactive map of GoT, allowing users to zoom, pan, and click on locations to reveal detailed lore",
+    link: "http://krishthakkar.com/got-map/",
+    lane: "web",
+    image: "src/projectimages/gotmap.png",
+  },
 ];
 
 // Which tiles should feel “bigger”
@@ -32,17 +92,32 @@ function escapeHtml(str) {
 
 function tileTemplate(p) {
   const isFeatured = featuredTitles.has(p.title);
-  const tileClasses = [
-    "tile",
-    isFeatured ? "tile--feature tile--span2" : ""
-  ].join(" ").trim();
+  const tileClasses = ["tile", isFeatured ? "tile--feature tile--span2" : ""]
+    .join(" ")
+    .trim();
 
-  const tags = p.tags.map(t => `<span class="tile__tag">${escapeHtml(t)}</span>`).join("");
+  const tags = p.tags
+    .map((t) => `<span class="tile__tag">${escapeHtml(t)}</span>`)
+    .join("");
 
-  const laneLabel = p.lane === "ml" ? "ML" : (p.lane === "web" ? "Web" : "Enterprise");
+  const laneLabel =
+    p.lane === "ml" ? "ML" : p.lane === "web" ? "Web" : "Enterprise";
+
+  // If an image is missing, we just don't render the media block
+  const media = p.image
+    ? `
+      <div class="tile__media" aria-hidden="true">
+        <img src="${p.image}" alt="" loading="lazy" decoding="async" />
+      </div>
+    `
+    : "";
 
   return `
-    <a class="${tileClasses}" href="${p.link}" target="_blank" rel="noreferrer" data-lane="${escapeHtml(p.lane)}">
+    <a class="${tileClasses}" href="${p.link}" target="_blank" rel="noreferrer" data-lane="${escapeHtml(
+    p.lane
+  )}">
+      ${media}
+
       <h3 class="tile__title">${escapeHtml(p.title)}</h3>
       <p class="tile__desc">${escapeHtml(p.desc)}</p>
 
@@ -63,16 +138,16 @@ tiles.innerHTML = projects.map(tileTemplate).join("");
 
 // Filters
 const filterButtons = document.querySelectorAll(".filter");
-filterButtons.forEach(btn => {
+filterButtons.forEach((btn) => {
   btn.addEventListener("click", () => {
     const filter = btn.dataset.filter;
 
-    filterButtons.forEach(b => {
+    filterButtons.forEach((b) => {
       b.classList.toggle("is-active", b === btn);
       b.setAttribute("aria-selected", b === btn ? "true" : "false");
     });
 
-    document.querySelectorAll(".tile").forEach(tile => {
+    document.querySelectorAll(".tile").forEach((tile) => {
       const lane = tile.getAttribute("data-lane");
       const show = filter === "all" || lane === filter;
       tile.style.display = show ? "" : "none";
@@ -82,12 +157,3 @@ filterButtons.forEach(btn => {
 
 // Footer year
 document.getElementById("year").textContent = new Date().getFullYear();
-
-/*
-  FUTURE PHOTO TILE (we’ll do later)
-  Example:
-  - Add class "tile--image" to the tile element
-  - Set background image:
-      tile.style.backgroundImage = "url('src/images/yourgrain.jpg')"
-  - Overlay + white text already handled in CSS (.tile--image)
-*/
