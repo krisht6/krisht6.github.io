@@ -93,6 +93,19 @@ body{
   letter-spacing: 0.06em;
 }
 
+.mast__actions{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+/* Safari grid bug fix */
+.hero{
+  justify-items: center;
+}
+
 .hero--image .mast__links,
 .hero--image .link{
   font-weight: 600;
@@ -100,6 +113,13 @@ body{
   text-transform: uppercase;
 }
 
+@media (max-width: 600px){
+  .mast__name{
+    font-size: 96px;       /* bigger than before */
+    line-height: 0.9;
+    letter-spacing: -0.05em;
+  }
+}
 
 .hero--vh{
   min-height: unset;
@@ -299,6 +319,29 @@ body{
     align-items: start;
   }
 }
+
+/* Extra side padding on iOS / small screens so text doesn't hug the bezel */
+@media (max-width: 600px){
+  #about .wrap{
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+@media (max-width: 600px){
+  #projects .wrap{
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+@media (max-width: 420px){
+  #projects .wrap{
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}
+
 
 
 
@@ -509,3 +552,21 @@ body{
   object-fit: cover;
   display: block;
 }
+
+/* Footer year + name: smaller but bolder */
+.footer span:first-child{
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.footer{
+  justify-content: center;
+  text-align: center;
+}
+
+.footer span{
+  width: 100%;
+}
+
