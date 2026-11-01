@@ -1,159 +1,41 @@
-// iOS Safari toolbar-safe viewport height fix
-function setVhVar() {
-  const vh = window.innerHeight * 0.01;
-  document.documentElement.style.setProperty("--vh", `${vh}px`);
-}
-setVhVar();
-window.addEventListener("resize", setVhVar);
-window.addEventListener("orientationchange", setVhVar);
+// Project content lives in index.html so it remains available without JavaScript.
+const filters = document.querySelector('.filters');
+const filterButtons = document.querySelectorAll('.filter');
+const cards = document.querySelectorAll('.tile');
+const status = document.getElementById('project-status');
 
-// NOTE:
-// Your images live in: /src/projectimages/*.png
-// Because main.js is loaded from the root, the correct relative path is:
-// "src/projectimages/<file>.png"
-const projects = [
-  {
-    title: "NFT Garage",
-    tags: ["Remix", "Solidity", "Sepolia"],
-    desc: "dApp enabling users to mint, customize, and display automotive NFTs on the Sepolia testnet",
-    link: "https://github.com/krisht6/NFT-Garage",
-    lane: "web",
-    image: "src/projectimages/nftgarage.png",
-  },
-  {
-    title: "Ontology Finder",
-    tags: ["EBI OLS4 API", "Bioinformatics"],
-    desc: "Browser-based interface for exploring biomedical ontologies (CL, GO, NCIT)",
-    link: "https://github.com/krisht6/ontology-finder-ui",
-    lane: "web",
-    image: "src/projectimages/ontologyfinder.png",
-  },
-  {
-    title: "HPF Datascrapes",
-    tags: ["Python", "Pandas"],
-    desc: "Data Processing for University at Buffalo Department of Behavioral Medicine",
-    link: "https://github.com/krisht6/HPFdatascrapes",
-    lane: "enterprise",
-    image: "src/projectimages/hpfdatascrapes.png",
-  },
-  {
-    title: "Catan AI/ML agent",
-    tags: ["Python", "Q-Learning", "Reinforcement"],
-    desc: "Self-play machine learning agent for Cities & Knights",
-    link: "https://github.com/krisht6/AI-Catan-Agent",
-    lane: "ml",
-    image: "src/projectimages/catan.png",
-  },
-  {
-    title: "FIFA Position Predictor",
-    tags: ["K-Clustering", "Data Analysis"],
-    desc: "Performance and history statistical relations to provide insights on teams/players",
-    link: "https://github.com/krisht6/Soccer-Player-Position-Model",
-    lane: "ml",
-    image: "src/projectimages/fifa.png",
-  },
-  {
-    title: "SAFE Optimization",
-    tags: ["Python", "Forecasting"],
-    desc: "Data-driven research and provided insights - Increased engagement on SA Meta Platforms by over 40%",
-    link: "https://github.com/krisht6/Safe-Data-Scrape",
-    lane: "enterprise",
-    image: "src/projectimages/safe.png",
-  },
-  {
-    title: "Heuristic Yahtzee",
-    tags: ["HTML", "Heuristics"],
-    desc: "Algorithm-powered CPU opponent in a web-based retro Yahtzee game.",
-    link: "https://krishthakkar.com/yahtzeeGame/",
-    lane: "web",
-    image: "src/projectimages/yahtzee.png",
-  },
-  {
-    title: "GoT Map",
-    tags: ["Webkit", "Scripting"],
-    desc: "Interactive map of GoT, allowing users to zoom, pan, and click on locations to reveal detailed lore",
-    link: "http://krishthakkar.com/got-map/",
-    lane: "web",
-    image: "src/projectimages/gotmap.png",
-  },
-];
+filterButtons.forEach((button) => {
+  button.addEventListener('click', () => {
+    const filter = button.dataset.filter;
+    let visibleCount = 0;
 
-// Which tiles should feel “bigger”
-const featuredTitles = new Set();
-
-function escapeHtml(str) {
-  return String(str)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
-
-function tileTemplate(p) {
-  const isFeatured = featuredTitles.has(p.title);
-  const tileClasses = ["tile", isFeatured ? "tile--feature tile--span2" : ""]
-    .join(" ")
-    .trim();
-
-  const tags = p.tags
-    .map((t) => `<span class="tile__tag">${escapeHtml(t)}</span>`)
-    .join("");
-
-  const laneLabel =
-    p.lane === "ml" ? "ML" : p.lane === "web" ? "Web" : "Enterprise";
-
-  // If an image is missing, we just don't render the media block
-  const media = p.image
-    ? `
-      <div class="tile__media" aria-hidden="true">
-        <img src="${p.image}" alt="" loading="lazy" decoding="async" />
-      </div>
-    `
-    : "";
-
-  return `
-    <a class="${tileClasses}" href="${p.link}" target="_blank" rel="noreferrer" data-lane="${escapeHtml(
-    p.lane
-  )}">
-      ${media}
-
-      <h3 class="tile__title">${escapeHtml(p.title)}</h3>
-      <p class="tile__desc">${escapeHtml(p.desc)}</p>
-
-      <div class="tile__tags" aria-label="Tags">
-        ${tags}
-      </div>
-
-      <div class="tile__foot">
-        <span class="tile__lane">${laneLabel}</span>
-        <span class="tile__open">Open</span>
-      </div>
-    </a>
-  `;
-}
-
-const tiles = document.getElementById("tiles");
-tiles.innerHTML = projects.map(tileTemplate).join("");
-
-// Filters
-const filterButtons = document.querySelectorAll(".filter");
-filterButtons.forEach((btn) => {
-  btn.addEventListener("click", () => {
-    const filter = btn.dataset.filter;
-
-    filterButtons.forEach((b) => {
-      b.classList.toggle("is-active", b === btn);
-      b.setAttribute("aria-selected", b === btn ? "true" : "false");
+    filterButtons.forEach((item) => {
+      const active = item === button;
+      item.classList.toggle('is-active', active);
+      item.setAttribute('aria-pressed', String(active));
     });
 
-    document.querySelectorAll(".tile").forEach((tile) => {
-      const lane = tile.getAttribute("data-lane");
-      const show = filter === "all" || lane === filter;
-      tile.style.display = show ? "" : "none";
+    cards.forEach((card) => {
+      card.hidden = filter !== 'all' && card.dataset.lane !== filter;
+      if (!card.hidden) visibleCount += 1;
     });
+
+    const category = filter === 'all' ? '' : button.textContent.trim() + ' ';
+    status.textContent = visibleCount + ' ' + category + (visibleCount === 1 ? 'project shown.' : 'projects shown.');
   });
 });
 
-// Footer year
-document.getElementById("year").textContent = new Date().getFullYear();
+filters.hidden = false;
+
+// Navigation links reopen a collapsed destination before the browser scrolls.
+function openSection(hash) {
+  if (!['#about', '#projects'].includes(hash)) return;
+  const disclosure = document.querySelector(hash + ' .section-disclosure');
+  if (disclosure) disclosure.open = true;
+}
+
+document.querySelectorAll('a[href^="#"]').forEach((link) => {
+  link.addEventListener('click', () => openSection(link.hash));
+});
+window.addEventListener('hashchange', () => openSection(window.location.hash));
+openSection(window.location.hash);
