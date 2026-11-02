@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#E8E3DC" />
+  <meta name="theme-color" content="#191817" />
   <meta name="description" content="Krish Thakkar — technical consultant building enterprise integrations, AI agents, and interactive web projects." />
   <title>Krish's Portfolio</title>
 
@@ -22,7 +22,7 @@
   <meta name="twitter:image" content="https://krishthakkar.com/src/redbackground-1920.jpg" />
   <meta name="twitter:image:alt" content="The red background from Krish Thakkar's portfolio." />
 
-  <script src="theme.js"></script>
+  <script>document.documentElement.classList.add('js');</script>
   <link rel="stylesheet" href="style.css" />
   <link rel="icon" type="image/svg+xml" href="src/favicon.svg">
   <script src="main.js" defer></script>
@@ -30,16 +30,17 @@
 
 <body>
   <a class="skip-link" href="#main-content">Skip to content</a>
+  <!-- The hero name shrinks into this bar as the page scrolls. -->
+  <nav class="topbar" aria-label="Primary">
+    <a class="topbar__name" href="#top" aria-label="krish, back to top">krish</a>
+  </nav>
+
   <header class="mast" id="top">
-    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark mode" hidden>
-      <svg class="theme-toggle__moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 13A8.5 8.5 0 0 1 11 3.5 8.5 8.5 0 1 0 20.5 13Z" /></svg>
-      <svg class="theme-toggle__sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg>
-    </button>
     <section class="hero hero--image">
         <img class="hero__image" src="src/redbackground-1920.jpg"
           srcset="src/redbackground-960.jpg 960w, src/redbackground-1920.jpg 1920w"
           sizes="100vw" width="1920" height="1080" alt="" fetchpriority="high" />
-        <h1 class="mast__name">krish</h1>
+        <h1 class="mast__name" aria-label="krish"><span class="mast__nameText" aria-hidden="true"><span class="char" style="--i:0">k</span><span class="char" style="--i:1">r</span><span class="char" style="--i:2">i</span><span class="char" style="--i:3">s</span><span class="char" style="--i:4">h</span></span></h1>
 
         <div class="mast__actions">
           <a class="btn" href="#projects">View Projects</a>
@@ -66,7 +67,7 @@
           </summary>
           <div class="section-content">
 
-        <div class="aboutIntro">
+        <div class="aboutIntro reveal" style="--i:0">
           <div>
             <h3 class="aboutLeadTitle">Technical Consultant @ <a class="link" href="https://argano.com/" target="_blank" rel="noreferrer">Argano</a></h3>
             <p class="aboutLeadMeta">Connecting enterprise systems, automating business processes, and building AI agents across Oracle Cloud.</p>
@@ -75,7 +76,7 @@
         </div>
 
         <div class="aboutGrid">
-          <article class="aboutBlock">
+          <article class="aboutBlock reveal" style="--i:1">
             <h3 class="aboutBlock__title">Enterprise integrations &amp; middleware</h3>
             <p class="aboutBlock__tools">Oracle Integration Cloud (OIC)</p>
             <ul class="aboutBlock__list">
@@ -84,12 +85,12 @@
               <li><strong>Business &amp; financial processes.</strong> HCM/payroll, Fidelity 401(k), and opportunity-to-project automation.</li>
             </ul>
           </article>
-          <article class="aboutBlock">
+          <article class="aboutBlock reveal" style="--i:2">
             <h3 class="aboutBlock__title">AI agents &amp; intelligent automation</h3>
             <p class="aboutBlock__tools">Oracle AI Agent Studio</p>
             <p class="aboutBlock__copy">Building HCM assistants and agents for benefits and workforce workflows, supporting employees and HR teams.</p>
           </article>
-          <article class="aboutBlock">
+          <article class="aboutBlock reveal" style="--i:3">
             <h3 class="aboutBlock__title">API engineering &amp; testing</h3>
             <p class="aboutBlock__tools">Postman &middot; XML/JSON &middot; XSLT &middot; OAuth &middot; SQL</p>
             <p class="aboutBlock__copy">Building and testing APIs, transforming data, and monitoring integrations to troubleshoot issues across connected systems.</p>
@@ -103,13 +104,18 @@
     <!-- PROJECTS -->
     <section id="projects" class="section">
       <div class="wrap">
-        <details class="section-disclosure">
+        <details class="section-disclosure" open>
           <summary class="section-toggle section__head">
             <h2 class="kicker">Projects</h2>
             <span class="section-toggle__icon" aria-hidden="true"></span>
           </summary>
           <div class="section-content">
 
+        <!-- Without JavaScript the tiles stay a grid; main.js turns this into a carousel. -->
+        <div class="showcase" id="showcase">
+        <div class="showcase__stage">
+        <div class="showcase__main">
+        <div class="showcase__top">
           <!-- Filters become available after JavaScript initializes. -->
           <div class="filters" hidden role="group" aria-label="Project filters">
             <button class="filter is-active" data-filter="all" aria-pressed="true">All</button>
@@ -119,194 +125,133 @@
             <button class="filter" data-filter="data" aria-pressed="false">Data</button>
           </div>
 
+        </div>
         <p id="project-status" class="sr-only" role="status" aria-atomic="true"></p>
         <div id="tiles" class="tileGrid">
           <a class="tile" href="https://github.com/krisht6/Windows-PC-iPhone-Controller" target="_blank" rel="noreferrer" data-lane="desktop">
-            <div class="tile__head" aria-hidden="true">
-              <span class="tile__number">01</span>
-              <span class="tile__arrow">&#8599;</span>
-            </div>
-            <h3 class="tile__title">PC Remote</h3>
-            <p class="tile__desc">Control a Windows PC from an iPhone with a touchpad, keyboard, and media controls, using paired devices over the local network.</p>
+            <span class="tile__number" aria-hidden="true">01</span>
+            <h3 class="tile__title">Remote Cursor</h3>
             <div class="tile__tags" aria-label="Technologies and project type">
               <span class="tile__tag">Electron</span>
               <span class="tile__tag">TypeScript</span>
               <span class="tile__tag">WebSockets</span>
             </div>
-            <div class="tile__foot">
-              <span class="tile__lane">Desktop</span>
-              <span class="tile__open">View code<span class="sr-only"> (opens in a new tab)</span></span>
-            </div>
+            <p class="tile__desc">Control a Windows PC from an iPhone with a touchpad, keyboard, and media controls, using paired devices over the local network.</p>
+            <span class="tile__open">View code<span class="tile__openArrow" aria-hidden="true">&#8599;</span><span class="sr-only"> (opens in a new tab)</span></span>
           </a>
           <a class="tile" href="https://falsenine.org/" target="_blank" rel="noreferrer" data-lane="web">
-            <div class="tile__head" aria-hidden="true">
-              <span class="tile__number">02</span>
-              <span class="tile__arrow">&#8599;</span>
-            </div>
+            <span class="tile__number" aria-hidden="true">02</span>
             <h3 class="tile__title">False Nine</h3>
-            <p class="tile__desc">Explore modern football through season chapters, player profiles, and club timelines, tracing the game from 2005 onward.</p>
             <div class="tile__tags" aria-label="Technologies and project type">
               <span class="tile__tag">JavaScript</span>
               <span class="tile__tag">JSON</span>
               <span class="tile__tag">Interactive archive</span>
             </div>
-            <div class="tile__foot">
-              <span class="tile__lane">Web</span>
-              <span class="tile__open">View site<span class="sr-only"> (opens in a new tab)</span></span>
-            </div>
+            <p class="tile__desc">Explore modern football through season chapters, player profiles, and club timelines, tracing the game from 2005 onward.</p>
+            <span class="tile__open">View site<span class="tile__openArrow" aria-hidden="true">&#8599;</span><span class="sr-only"> (opens in a new tab)</span></span>
           </a>
           <a class="tile" href="https://rappermapper.com/" target="_blank" rel="noreferrer" data-lane="web">
-            <div class="tile__head" aria-hidden="true">
-              <span class="tile__number">03</span>
-              <span class="tile__arrow">&#8599;</span>
-            </div>
+            <span class="tile__number" aria-hidden="true">03</span>
             <h3 class="tile__title">Rapper Mapper</h3>
-            <p class="tile__desc">Explore connections between rappers in an interactive map, filtering artists by genre, scene, and location.</p>
             <div class="tile__tags" aria-label="Technologies and project type">
               <span class="tile__tag">JavaScript</span>
               <span class="tile__tag">SVG</span>
               <span class="tile__tag">Interactive map</span>
             </div>
-            <div class="tile__foot">
-              <span class="tile__lane">Web</span>
-              <span class="tile__open">View site<span class="sr-only"> (opens in a new tab)</span></span>
-            </div>
+            <p class="tile__desc">Explore connections between rappers in an interactive map, filtering artists by genre, scene, and location.</p>
+            <span class="tile__open">View site<span class="tile__openArrow" aria-hidden="true">&#8599;</span><span class="sr-only"> (opens in a new tab)</span></span>
           </a>
           <a class="tile" href="https://github.com/krisht6/NFT-Garage" target="_blank" rel="noreferrer" data-lane="web">
-            <div class="tile__head" aria-hidden="true">
-              <span class="tile__number">04</span>
-              <span class="tile__arrow">&#8599;</span>
-            </div>
+            <span class="tile__number" aria-hidden="true">04</span>
             <h3 class="tile__title">NFT Garage</h3>
-            <p class="tile__desc">Mint, customize, and display automotive NFTs through a decentralized app on the Sepolia test network.</p>
             <div class="tile__tags" aria-label="Technologies and project type">
               <span class="tile__tag">Solidity</span>
               <span class="tile__tag">Sepolia</span>
               <span class="tile__tag">dApp</span>
             </div>
-            <div class="tile__foot">
-              <span class="tile__lane">Web</span>
-              <span class="tile__open">View code<span class="sr-only"> (opens in a new tab)</span></span>
-            </div>
+            <p class="tile__desc">Mint, customize, and display automotive NFTs through a decentralized app on the Sepolia test network.</p>
+            <span class="tile__open">View code<span class="tile__openArrow" aria-hidden="true">&#8599;</span><span class="sr-only"> (opens in a new tab)</span></span>
           </a>
           <a class="tile" href="https://github.com/krisht6/ontology-finder-ui" target="_blank" rel="noreferrer" data-lane="web">
-            <div class="tile__head" aria-hidden="true">
-              <span class="tile__number">05</span>
-              <span class="tile__arrow">&#8599;</span>
-            </div>
+            <span class="tile__number" aria-hidden="true">05</span>
             <h3 class="tile__title">Ontology Finder</h3>
-            <p class="tile__desc">Search biomedical ontologies individually or in batches, then export structured CSV results for research and data annotation.</p>
             <div class="tile__tags" aria-label="Technologies and project type">
               <span class="tile__tag">JavaScript</span>
               <span class="tile__tag">OLS4 API</span>
               <span class="tile__tag">Research tool</span>
             </div>
-            <div class="tile__foot">
-              <span class="tile__lane">Web</span>
-              <span class="tile__open">View code<span class="sr-only"> (opens in a new tab)</span></span>
-            </div>
+            <p class="tile__desc">Search biomedical ontologies individually or in batches, then export structured CSV results for research and data annotation.</p>
+            <span class="tile__open">View code<span class="tile__openArrow" aria-hidden="true">&#8599;</span><span class="sr-only"> (opens in a new tab)</span></span>
           </a>
           <a class="tile" href="https://github.com/krisht6/HPFdatascrapes" target="_blank" rel="noreferrer" data-lane="data">
-            <div class="tile__head" aria-hidden="true">
-              <span class="tile__number">06</span>
-              <span class="tile__arrow">&#8599;</span>
-            </div>
+            <span class="tile__number" aria-hidden="true">06</span>
             <h3 class="tile__title">HPF Datascrapes</h3>
-            <p class="tile__desc">Clean and group nutritional records for University at Buffalo research on hyper-palatable foods, filtering liquids and zero-calorie entries before scoring.</p>
             <div class="tile__tags" aria-label="Technologies and project type">
               <span class="tile__tag">Python</span>
               <span class="tile__tag">Pandas</span>
               <span class="tile__tag">Data processing</span>
             </div>
-            <div class="tile__foot">
-              <span class="tile__lane">Data</span>
-              <span class="tile__open">View code<span class="sr-only"> (opens in a new tab)</span></span>
-            </div>
+            <p class="tile__desc">Clean and group nutritional records for University at Buffalo research on hyper-palatable foods, filtering liquids and zero-calorie entries before scoring.</p>
+            <span class="tile__open">View code<span class="tile__openArrow" aria-hidden="true">&#8599;</span><span class="sr-only"> (opens in a new tab)</span></span>
           </a>
           <a class="tile" href="https://github.com/krisht6/AI-Catan-Agent" target="_blank" rel="noreferrer" data-lane="ml">
-            <div class="tile__head" aria-hidden="true">
-              <span class="tile__number">07</span>
-              <span class="tile__arrow">&#8599;</span>
-            </div>
+            <span class="tile__number" aria-hidden="true">07</span>
             <h3 class="tile__title">Catan AI Agent</h3>
-            <p class="tile__desc">An experimental Catan agent project exploring game-state representation and strategy, with reinforcement learning and Cities &amp; Knights as development goals.</p>
             <div class="tile__tags" aria-label="Technologies and project type">
               <span class="tile__tag">Python</span>
               <span class="tile__tag">Game simulation</span>
               <span class="tile__tag">AI research</span>
             </div>
-            <div class="tile__foot">
-              <span class="tile__lane">ML</span>
-              <span class="tile__open">View code<span class="sr-only"> (opens in a new tab)</span></span>
-            </div>
+            <p class="tile__desc">An experimental Catan agent project exploring game-state representation and strategy, with reinforcement learning and Cities &amp; Knights as development goals.</p>
+            <span class="tile__open">View code<span class="tile__openArrow" aria-hidden="true">&#8599;</span><span class="sr-only"> (opens in a new tab)</span></span>
           </a>
           <a class="tile" href="https://github.com/krisht6/Soccer-Player-Position-Model" target="_blank" rel="noreferrer" data-lane="ml">
-            <div class="tile__head" aria-hidden="true">
-              <span class="tile__number">08</span>
-              <span class="tile__arrow">&#8599;</span>
-            </div>
+            <span class="tile__number" aria-hidden="true">08</span>
             <h3 class="tile__title">FIFA Position Predictor</h3>
-            <p class="tile__desc">Classify players as defenders or midfielders from FIFA performance stats using K-nearest neighbors, with a reported peak test accuracy of 87.6%.</p>
             <div class="tile__tags" aria-label="Technologies and project type">
               <span class="tile__tag">Python</span>
               <span class="tile__tag">scikit-learn</span>
               <span class="tile__tag">KNN</span>
             </div>
-            <div class="tile__foot">
-              <span class="tile__lane">ML</span>
-              <span class="tile__open">View code<span class="sr-only"> (opens in a new tab)</span></span>
-            </div>
+            <p class="tile__desc">Classify players as defenders or midfielders from FIFA performance stats using K-nearest neighbors, with a reported peak test accuracy of 87.6%.</p>
+            <span class="tile__open">View code<span class="tile__openArrow" aria-hidden="true">&#8599;</span><span class="sr-only"> (opens in a new tab)</span></span>
           </a>
           <a class="tile" href="https://github.com/krisht6/Safe-Data-Scrape" target="_blank" rel="noreferrer" data-lane="data">
-            <div class="tile__head" aria-hidden="true">
-              <span class="tile__number">09</span>
-              <span class="tile__arrow">&#8599;</span>
-            </div>
+            <span class="tile__number" aria-hidden="true">09</span>
             <h3 class="tile__title">SAFE Optimization</h3>
-            <p class="tile__desc">Analyze and visualize student association data to inform event planning and engagement strategies, contributing to a reported 40%+ increase in engagement on SA Meta platforms.</p>
             <div class="tile__tags" aria-label="Technologies and project type">
               <span class="tile__tag">Python</span>
               <span class="tile__tag">Matplotlib</span>
               <span class="tile__tag">Forecasting</span>
             </div>
-            <div class="tile__foot">
-              <span class="tile__lane">Data</span>
-              <span class="tile__open">View code<span class="sr-only"> (opens in a new tab)</span></span>
-            </div>
+            <p class="tile__desc">Analyze and visualize student association data to inform event planning and engagement strategies, contributing to a reported 40%+ increase in engagement on SA Meta platforms.</p>
+            <span class="tile__open">View code<span class="tile__openArrow" aria-hidden="true">&#8599;</span><span class="sr-only"> (opens in a new tab)</span></span>
           </a>
           <a class="tile" href="https://krishthakkar.com/yahtzeeGame/" target="_blank" rel="noreferrer" data-lane="web">
-            <div class="tile__head" aria-hidden="true">
-              <span class="tile__number">10</span>
-              <span class="tile__arrow">&#8599;</span>
-            </div>
+            <span class="tile__number" aria-hidden="true">10</span>
             <h3 class="tile__title">Heuristic Yahtzee</h3>
-            <p class="tile__desc">Play a retro browser-based Yahtzee game against a CPU opponent that uses heuristics to make its decisions.</p>
             <div class="tile__tags" aria-label="Technologies and project type">
               <span class="tile__tag">HTML</span>
               <span class="tile__tag">Heuristics</span>
               <span class="tile__tag">Browser game</span>
             </div>
-            <div class="tile__foot">
-              <span class="tile__lane">Web</span>
-              <span class="tile__open">View site<span class="sr-only"> (opens in a new tab)</span></span>
-            </div>
+            <p class="tile__desc">Play a retro browser-based Yahtzee game against a CPU opponent that uses heuristics to make its decisions.</p>
+            <span class="tile__open">View site<span class="tile__openArrow" aria-hidden="true">&#8599;</span><span class="sr-only"> (opens in a new tab)</span></span>
           </a>
           <a class="tile" href="https://krishthakkar.com/got-map/" target="_blank" rel="noreferrer" data-lane="web">
-            <div class="tile__head" aria-hidden="true">
-              <span class="tile__number">11</span>
-              <span class="tile__arrow">&#8599;</span>
-            </div>
+            <span class="tile__number" aria-hidden="true">11</span>
             <h3 class="tile__title">GoT Map</h3>
-            <p class="tile__desc">Explore Game of Thrones locations and key events through an interactive map, with filters for castles, battles, and politics.</p>
             <div class="tile__tags" aria-label="Technologies and project type">
               <span class="tile__tag">Interactive map</span>
               <span class="tile__tag">Lore explorer</span>
             </div>
-            <div class="tile__foot">
-              <span class="tile__lane">Web</span>
-              <span class="tile__open">View site<span class="sr-only"> (opens in a new tab)</span></span>
-            </div>
+            <p class="tile__desc">Explore Game of Thrones locations and key events through an interactive map, with filters for castles, battles, and politics.</p>
+            <span class="tile__open">View site<span class="tile__openArrow" aria-hidden="true">&#8599;</span><span class="sr-only"> (opens in a new tab)</span></span>
           </a>
+        </div>
+        <div class="showcase__progress" aria-hidden="true" hidden><span class="showcase__progressBar"></span></div>
+        </div>
+        </div>
         </div>
           </div>
         </details>
