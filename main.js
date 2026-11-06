@@ -13,16 +13,17 @@ function requestFrame() {
 /* ---------- Header: the hero name shrinks and docks into the top bar ---------- */
 const topbar = document.querySelector('.topbar');
 const hero = document.querySelector('.hero');
-const heroImage = document.querySelector('.hero__image');
 const heroName = document.querySelector('.mast__name');
 const heroNameText = document.querySelector('.mast__nameText');
 const barName = document.querySelector('.topbar__name');
 let dock = { dx: 0, scale: 1, distance: 1 };
 let heroHeight = 0;
+let headerHeight = 0;
+let lastHeaderY = -1;
 
 function measureDock() {
-  heroNameText.style.translate = '';
-  heroNameText.style.scale = '';
+  heroNameText.style.transform = '';
+  lastHeaderY = -1;
   const from = heroNameText.getBoundingClientRect();
   const to = barName.getBoundingClientRect();
   // The name keeps scrolling with the page, so it reaches the bar after exactly this distance.
@@ -33,19 +34,20 @@ function measureDock() {
     distance: Math.max(1, distance),
   };
   heroHeight = hero.offsetHeight;
+  headerHeight = topbar.offsetHeight;
 }
 
 function updateHeader(y) {
+  if (y === lastHeaderY) return;
+  lastHeaderY = y;
   const progress = clamp(y / dock.distance, 0, 1);
   if (!reduceMotion.matches) {
-    heroNameText.style.translate = `${dock.dx * progress}px 0`;
-    heroNameText.style.scale = lerp(1, dock.scale, progress);
-    if (y < heroHeight) heroImage.style.translate = `0 ${y * 0.35}px`;
+    heroNameText.style.transform = `translate3d(${dock.dx * progress}px, 0, 0) scale(${lerp(1, dock.scale, progress)})`;
   }
   const docked = progress >= 1;
   heroName.classList.toggle('is-docked', docked);
   topbar.classList.toggle('is-named', docked);
-  topbar.classList.toggle('is-solid', y > heroHeight - topbar.offsetHeight);
+  topbar.classList.toggle('is-solid', y > heroHeight - headerHeight);
 }
 
 /* ---------- About: blocks stagger in as they enter the viewport ---------- */
@@ -102,9 +104,17 @@ document.querySelectorAll('.section-disclosure').forEach((details) => {
 const showcase = (() => {
   const root = document.getElementById('showcase');
   const grid = document.getElementById('tiles');
+  const stage = root.querySelector('.showcase__stage');
+  const heading = root.closest('.section-disclosure').querySelector('summary');
   const progress = root.querySelector('.showcase__progress');
   const progressBar = root.querySelector('.showcase__progressBar');
   const pinnedQuery = window.matchMedia('(min-width: 900px) and (min-height: 600px)');
+  // Avoid recalculating card transforms and blur while the hero is onscreen.
+  let stageVisible = false;
+  new IntersectionObserver(([entry]) => {
+    stageVisible = entry.isIntersecting;
+    if (stageVisible) requestFrame();
+  }, { rootMargin: '150px 0px' }).observe(stage);
 
   let items = [];
   let mode = '';
@@ -115,12 +125,12 @@ const showcase = (() => {
   let spacing = 0; // horizontal distance between pinned cards
   let pitch = 1; // rail scroll per card
   let trackTop = 0;
-  let barHeight = 0;
+  let pinTop = 0;
   let lastTime = 0;
   let settleTimer = 0;
 
   const isLaidOut = () => root.getClientRects().length > 0;
-  const startY = () => trackTop - barHeight;
+  const startY = () => trackTop - pinTop;
 
   function setMode() {
     mode = pinnedQuery.matches && !reduceMotion.matches ? 'pinned' : 'rail';
@@ -137,8 +147,11 @@ const showcase = (() => {
 
   function measure() {
     if (!isLaidOut() || !items.length) return;
-    barHeight = topbar.offsetHeight;
     if (mode === 'pinned') {
+      // Keep the stage directly below its sticky section heading.
+      root.style.setProperty('--section-head-h', heading.offsetHeight + 'px');
+      // Match the actual sticky offset so the last card reaches page bottom exactly.
+      pinTop = parseFloat(getComputedStyle(stage).top);
       step = Math.round(window.innerHeight * 0.42);
       root.style.setProperty('--travel', (items.length - 1) * step + 'px');
       trackTop = root.getBoundingClientRect().top + window.scrollY;
@@ -162,7 +175,7 @@ const showcase = (() => {
   }
 
   function update(now) {
-    if (!isLaidOut() || !items.length) return;
+    if (!stageVisible || !isLaidOut() || !items.length) return;
     readTarget();
     if (mode === 'pinned') {
       // Ease toward the scroll position so chunky wheel steps still glide.
@@ -325,6 +338,12 @@ function relayout() {
   requestFrame();
 }
 window.addEventListener('resize', relayout);
+reduceMotion.addEventListener('change', () => {
+  heroNameText.style.transform = '';
+  relayout();
+});
+// The display font can finish loading after the first docking measurement.
+if (document.fonts) document.fonts.ready.then(relayout);
 // Opening a section moves everything below it, so remeasure whenever the content resizes.
 // (body is pinned to 100% height, so watch main instead.)
 new ResizeObserver(() => {
